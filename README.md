@@ -16,4 +16,4 @@ This is a simple weather forecasting app built with Flutter. It allows users to 
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/guirguisnashatzaki/Weather-App.git
-cd weather_app
+cd Weather-App
