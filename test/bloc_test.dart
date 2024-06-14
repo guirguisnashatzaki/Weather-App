@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -11,20 +12,43 @@ import 'bloc_test.mocks.dart';
 void main(){
   MockWeatherService weatherService = MockWeatherService();
 
-  group("Bloc test", () {
+  group("Weather Bloc test", () {
 
     var weather = Weather();
 
-    when(weatherService.getWeather("Alexandria")).thenAnswer((realInvocation) => Future.value(weather));
+    when(weatherService.getWeather(any)).thenAnswer((realInvocation) => Future.value(weather));
+    when(weatherService.getCurrentCity()).thenAnswer((realInvocation) => Future.value("Alexandria"));
 
     blocTest<WeatherServiceCubit,WeatherServiceState>(
-        "Weather cubit test",
-        build: () => WeatherServiceCubit(),
+        "Weather desired city",
+        build: () => WeatherServiceCubit(weatherService),
         act: (bloc){
           bloc.fetchWeatherForDesiredCity("Alexandria");
         },
         expect: () => <WeatherServiceState>[
+          WeatherLoaded(weather)
+        ]
+    );
 
+    blocTest<WeatherServiceCubit,WeatherServiceState>(
+        "Weather my city",
+        build: () => WeatherServiceCubit(weatherService),
+        act: (bloc){
+          bloc.fetchWeatherForCurrentLocation();
+        },
+        expect: () => <WeatherServiceState>[
+          WeatherLoaded(weather)
+        ]
+    );
+
+    blocTest<WeatherServiceCubit,WeatherServiceState>(
+        "Weather clear",
+        build: () => WeatherServiceCubit(weatherService),
+        act: (bloc){
+          bloc.clearWeather();
+        },
+        expect: () => <WeatherServiceState>[
+          WeatherServiceInitial(null)
         ]
     );
 

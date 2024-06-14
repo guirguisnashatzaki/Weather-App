@@ -8,8 +8,8 @@ import 'package:weatherapp/services/weather_service.dart';
 part 'weather_service_state.dart';
 
 class WeatherServiceCubit extends Cubit<WeatherServiceState> {
-  final WeatherService _weatherService = const WeatherService(apiKey: constants.API_KEY);
-  WeatherServiceCubit() : super(WeatherServiceInitial(null));
+  final WeatherService _weatherService;
+  WeatherServiceCubit(this._weatherService) : super(WeatherServiceInitial(null));
   Weather? weather;
 
   Future<void> fetchWeatherForCurrentLocation()async{

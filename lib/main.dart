@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weatherapp/blocViewModels/loading_cubit.dart';
 import 'package:weatherapp/blocViewModels/weather_service_cubit.dart';
 import 'package:weatherapp/pages/weather_page.dart';
+import 'package:weatherapp/services/weather_service.dart';
+import 'package:weatherapp/constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (BuildContext context) => WeatherServiceCubit(),
+            create: (BuildContext context) => WeatherServiceCubit(const WeatherService(apiKey: constants.API_KEY)),
           ),
           BlocProvider(
             create: (BuildContext context) => LoadingCubit(),
