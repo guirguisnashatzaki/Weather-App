@@ -16,7 +16,7 @@ void main(){
 
     var weather = Weather();
 
-    when(weatherService.getWeather(any)).thenAnswer((realInvocation) => Future.value(weather));
+    when(weatherService.getWeather("Alexandria")).thenAnswer((realInvocation) => Future.value(weather));
     when(weatherService.getCurrentCity()).thenAnswer((realInvocation) => Future.value("Alexandria"));
 
     blocTest<WeatherServiceCubit,WeatherServiceState>(
@@ -27,6 +27,17 @@ void main(){
         },
         expect: () => <WeatherServiceState>[
           WeatherLoaded(weather)
+        ]
+    );
+
+    blocTest<WeatherServiceCubit,WeatherServiceState>(
+        "Weather desired city Error",
+        build: () => WeatherServiceCubit(weatherService),
+        act: (bloc){
+          bloc.fetchWeatherForDesiredCity("");
+        },
+        expect: () => <WeatherServiceState>[
+          WeatherError(null)
         ]
     );
 
